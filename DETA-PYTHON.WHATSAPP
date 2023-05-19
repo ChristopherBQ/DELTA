@@ -1,0 +1,54 @@
+import pywhatkit
+import time
+from pyModbusTCP.client import ModbusClient
+
+# Dirección IP del PLC Delta DVP
+plc_ip = '192.168.1.5'
+
+
+while 1:
+    time.sleep(2)
+    # Dirección del registro (tag) a leer
+    tag_address = 10  # Por ejemplo, leemos el registro 100
+
+    # Crear una instancia del cliente Modbus TCP
+    client = ModbusClient(host=plc_ip, port=502)  # Puerto predeterminado del protocolo Modbus TCP
+
+    # Leer el valor del tag
+    result = client.read_holding_registers(tag_address, 1)  # Leemos un solo registro
+
+    # Verificar si la lectura fue exitosa
+    if result:
+        # Obtener el valor del registro leído
+        tag_value = result[0]  # En este ejemplo, asumimos que el tag es un registro de 16 bits
+
+        # Imprimir el valor del tag
+        print("Valor del tag:", tag_value)
+
+        # Aquí puedes hacer lo que necesites con el valor del tag, como guardarlo en una variable, escribirlo en un archivo, etc.
+    else:
+        print("Error al leer el tag")
+
+    # Cerrar la conexión con el PLC
+    client.close()
+
+    mensajes = tag_value
+
+    v0= mensajes
+
+    v1= 1
+    v2= 2
+    v3= 3
+    v4= 4
+
+    if v0 == 0:
+        #pywhatkit.sendwhatmsg_instantly('+52 7291002714', 'No hay alarmas', 15, True, 2)
+        print("No hay alarmas")
+    if v0 == v1:
+        pywhatkit.sendwhatmsg_instantly('+52 7291002714', 'alarmas 1', 15, True, 2)
+    if v0 == v2:
+        pywhatkit.sendwhatmsg_instantly('+34 613288116', 'HOLA QUIEN ERES? ', 15)
+    if v0 == v3:
+        pywhatkit.sendwhatmsg_instantly('+52 7291002714', 'alarmas 3', 15, True, 2)
+    if v0 == v4:
+        pywhatkit.sendwhatmsg_instantly('+52 7291002714', 'alarmas 4', 15, True, 2)
